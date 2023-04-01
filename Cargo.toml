@@ -1,0 +1,9 @@
+[package]
+name = "n7506"
+authors = ["Haruki Jay Shimada <peaske16180@gmail.com>"]
+description = """
+A Rust implementation of the concepts outlined in the paper: 
+A Comprehensive Study of Convergent and Commutative Replicated Data Types
+"""
+edition = "2021"
+version = "0.1.0"
