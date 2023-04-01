@@ -1,5 +1,5 @@
 [package]
-name = "n7506"
+name = "implementing-comprehensive-study-of-crdts"
 authors = ["Haruki Jay Shimada <peaske16180@gmail.com>"]
 description = """
 A Rust implementation of the concepts outlined in the paper: 
