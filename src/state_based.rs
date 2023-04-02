@@ -1,20 +1,20 @@
-/// State-based object specs
-///
-/// ```txt
-/// payload Payload type; instantiated at all replicas
-///   initial Initial value
-/// query Query (arguments) : returns
-///   pre Precondition
-///   let Evaluate synchronously, no side effects
-/// update Source-local operation (arguments) : returns
-///   pre Precondition
-///   let Evaluate at source, synchronously
-///   Side-effects at source to execute synchronously
-/// compare (value1, value2) : boolean b
-///   Is value1 ≤ value2 in semilattice?
-/// merge (value1, value2) : payload mergedValue
-///   LUB merge of value1 and value2, at any replica
-/// ```
+//! State-based object specs
+//!
+//! ```txt
+//! payload Payload type; instantiated at all replicas
+//!   initial Initial value
+//! query Query (arguments) : returns
+//!   pre Precondition
+//!   let Evaluate synchronously, no side effects
+//! update Source-local operation (arguments) : returns
+//!   pre Precondition
+//!   let Evaluate at source, synchronously
+//!   Side-effects at source to execute synchronously
+//! compare (value1, value2) : boolean b
+//!   Is value1 ≤ value2 in semilattice?
+//! merge (value1, value2) : payload mergedValue
+//!   LUB merge of value1 and value2, at any replica
+//! ```
 
 pub trait Semilattice {
     fn compare(&self, other: &Self) -> bool;
@@ -23,7 +23,6 @@ pub trait Semilattice {
 }
 
 pub trait StateBased<T> {
-    type Payload: Semilattice + Default + Clone;
     type Query: FnOnce(&T) -> Option<T>;
     type Update: FnOnce(&mut T) -> Option<T>;
     type Error;
@@ -53,7 +52,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use std::cmp::max;
+    use std::{cmp::max, convert::Infallible};
 
     use super::*;
 
@@ -68,10 +67,9 @@ mod tests {
     }
 
     impl StateBased<i32> for i32 {
-        type Payload = i32;
         type Query = fn(&i32) -> Option<i32>;
         type Update = fn(&mut i32) -> Option<i32>;
-        type Error = ();
+        type Error = Infallible;
 
         fn query(&self, query: Self::Query) -> Result<Option<i32>, Self::Error> {
             Ok(query(self))
